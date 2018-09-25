@@ -10,18 +10,25 @@ add_definitions(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
-  ikid_msgs
-  Config
+  GoogleDeps
+  Shm
 )
 
-include(${Config_SOURCE_PREFIX}/cmake/GoogleDeps.cmake)
+list(APPEND CMAKE_PREFIX_PATH ${GoogleDeps_SOURCE_PREFIX}/share/cartographer)
 
-include_directories(
- include
- ${catkin_INCLUDE_DIRS}
- ${GOOGLE_INCLUDE_DIRS}
+find_package(cartographer REQUIRED)
 
-)
+include("${CARTOGRAPHER_CMAKE_DIR}/functions.cmake")
+
+set(BUILD_SHARED_LIBS OFF)
+option(BUILD_GRPC "build features that require Cartographer gRPC support" false)
+google_initialize_cartographer_project()
+google_enable_testing()
+
+include(FindPkgConfig)
+
+find_package(LuaGoogle REQUIRED)
+find_package(Ceres REQUIRED)
 
 ###################################
 ## catkin specific configuration ##
@@ -31,8 +38,17 @@ catkin_package(
   INCLUDE_DIRS include
   CATKIN_DEPENDS roscpp
                  std_msgs
-                 ikid_msgs
-                 Config
+)
+
+if (CMAKE_BUILD_TYPE STREQUAL Debug)
+  add_definitions(-DDEBUG)
+endif()
+
+## Specify additional locations of header files
+## Your package locations should be listed before other locations
+include_directories(
+ include
+ ${catkin_INCLUDE_DIRS}
 )
 
 ###########
@@ -42,14 +58,13 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 
-add_executable(GameControllerNodeMain
-  src/GameControllerNodeMain.cc
-  src/GameControllerNode.cc
-  src/GameController.cc
+add_executable(${PROJECT_NAME}
+  src/${PROJECT_NAME}NodeMain.cc
+  src/${PROJECT_NAME}Node.cc
   src/UdpComm.cpp
 )
 
-target_link_libraries(GameControllerNodeMain
+target_link_libraries(${PROJECT_NAME}
+  cartographer
   ${catkin_LIBRARIES}
-  ${GOOGLE_LIBS}
 )

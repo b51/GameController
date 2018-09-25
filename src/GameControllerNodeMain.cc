@@ -11,8 +11,7 @@
 
 #include "GameControllerNode.h"
 
-using namespace ikid;
-using namespace Comm;
+using namespace IKid;
 
 DEFINE_string(configuration_directory, "",
                   "First directory in which configuration files are searched, "

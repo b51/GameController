@@ -2,8 +2,8 @@
 
 <launch>
   <node name="GameController" pkg="GameController"
-      type="GameControllerNodeMain" args="
-          -configuration_directory $(find Config)/lua_configs
+      type="GameController" args="
+          -configuration_directory $(find GameController)/config
           -configuration_basename ConfigComm.lua"
       output="screen">
   </node>
