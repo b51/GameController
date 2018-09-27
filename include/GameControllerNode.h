@@ -57,7 +57,7 @@ private:
 
   std::unique_ptr<UdpComm> udp_;
   in_addr game_ctrler_addr_;
-  RoboCupGameControlData receive_packet_;
+  RoboCupGameControlData received_packet_;
 };
 
 } // namespace IKid

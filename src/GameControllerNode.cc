@@ -29,7 +29,7 @@ GameControllerNode::~GameControllerNode()
 
 void GameControllerNode::Init()
 {
-  memset(&receive_packet_, 0, sizeof(receive_packet_));
+  memset(&received_packet_, 0, sizeof(received_packet_));
   memset(&game_ctrler_addr_, 0, sizeof(game_ctrler_addr_));
 
   udp_.reset(new UdpComm());
@@ -59,7 +59,7 @@ bool GameControllerNode::PacketReceive()
         (buffer.teams[0].teamNumber == options_.team_number ||
          buffer.teams[1].teamNumber == options_.team_number))
     {
-      receive_packet_ = buffer;
+      received_packet_ = buffer;
 
       if (memcmp(&game_ctrler_addr_, &from.sin_addr, sizeof(in_addr)))
       {
@@ -72,19 +72,19 @@ bool GameControllerNode::PacketReceive()
   }
   if (received)
   {
-    LOG(INFO) << receive_packet_.header;
-    LOG(INFO) << receive_packet_.version;
-    LOG(INFO) << receive_packet_.packetNumber;
-    LOG(INFO) << receive_packet_.playersPerTeam;
-    LOG(INFO) << receive_packet_.gameType;
-    LOG(INFO) << receive_packet_.state;
-    LOG(INFO) << receive_packet_.firstHalf;
-    LOG(INFO) << receive_packet_.kickOffTeam;
-    LOG(INFO) << receive_packet_.secondaryState;
-    LOG(INFO) << receive_packet_.secondaryStateInfo;
-    LOG(INFO) << receive_packet_.dropInTeam;
-    LOG(INFO) << receive_packet_.secsRemaining;
-    LOG(INFO) << receive_packet_.secondaryTime;
+    LOG(INFO) << received_packet_.header;
+    LOG(INFO) << received_packet_.version;
+    LOG(INFO) << received_packet_.packetNumber;
+    LOG(INFO) << received_packet_.playersPerTeam;
+    LOG(INFO) << received_packet_.gameType;
+    LOG(INFO) << received_packet_.state;
+    LOG(INFO) << received_packet_.firstHalf;
+    LOG(INFO) << received_packet_.kickOffTeam;
+    LOG(INFO) << received_packet_.secondaryState;
+    LOG(INFO) << received_packet_.secondaryStateInfo;
+    LOG(INFO) << received_packet_.dropInTeam;
+    LOG(INFO) << received_packet_.secsRemaining;
+    LOG(INFO) << received_packet_.secondaryTime;
   }
   return received;
 }
